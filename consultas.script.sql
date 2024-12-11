@@ -28,16 +28,38 @@ FROM Customer C
 Where C.Country in ('USA', 'Canada', 'Brazil')
 
 -- Listar todas las pistas del artista 'Queen' (Artist.Name = 'Queen')
-
+SELECT T.Name
+FROM Track T
+INNER JOIN LemonMusic.dbo.Album Al
+	ON T.AlbumId = Al.AlbumId
+INNER JOIN LemonMusic.dbo.Artist Ar
+	ON Al.ArtistId = Ar.ArtistId
+WHERE Ar.Name = 'Queen'
 
 -- Listar las pistas del artista 'Queen' en las que haya participado como compositor David Bowie
-
+SELECT T.Name
+FROM Track T
+INNER JOIN LemonMusic.dbo.Album Al
+	ON T.AlbumId = Al.AlbumId
+INNER JOIN LemonMusic.dbo.Artist Ar
+	ON Al.ArtistId = Ar.ArtistId
+WHERE Ar.Name = 'Queen' AND T.Composer LIKE '%David Bowie%'
 
 -- Listar las pistas de la playlist 'Heavy Metal Classic'
-
+SELECT T.Name, P.Name
+FROM PlaylistTrack PT
+INNER JOIN LemonMusic.dbo.Track T
+	ON PT.TrackID = T.TrackId
+INNER JOIN LemonMusic.dbo.Playlist P
+	ON P.PlaylistId = PT.PlaylistId
+WHERE P.Name = 'Heavy Metal Classic'
 
 -- Listar las playlist junto con el número de pistas que contienen
-
+SELECT P.Name, COUNT(PT.TrackId)
+FROM PlaylistTrack PT
+INNER JOIN LemonMusic.dbo.Playlist P
+	ON P.PlaylistId = PT.PlaylistId
+GROUP BY P.Name
 
 -- Listar las playlist (sin repetir ninguna) que tienen alguna canción de AC/DC
 
