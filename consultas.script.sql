@@ -62,10 +62,31 @@ INNER JOIN LemonMusic.dbo.Playlist P
 GROUP BY P.Name
 
 -- Listar las playlist (sin repetir ninguna) que tienen alguna canción de AC/DC
-
+SELECT P.Name
+FROM  Playlist P
+INNER JOIN LemonMusic.dbo.PlaylistTrack PT
+	ON PT.PlaylistId = P.PlaylistId
+INNER JOIN LemonMusic.dbo.Track T
+	ON T.AlbumId = PT.TrackId
+INNER JOIN LemonMusic.dbo.Album Al
+	ON T.AlbumId = Al.AlbumId
+INNER JOIN LemonMusic.dbo.Artist Ar
+	ON Al.ArtistId = Ar.ArtistId
+Group By P.Name
 
 -- Listar las playlist que tienen alguna canción del artista Queen, junto con la cantidad que tienen
-
+SELECT P.Name as Playlist, COUNT(T.Name) as 'Track Count'
+FROM  Playlist P
+INNER JOIN LemonMusic.dbo.PlaylistTrack PT
+	ON PT.PlaylistId = P.PlaylistId
+INNER JOIN LemonMusic.dbo.Track T
+	ON T.TrackId = PT.TrackId
+INNER JOIN LemonMusic.dbo.Album Al
+	ON T.AlbumId = Al.AlbumId
+INNER JOIN LemonMusic.dbo.Artist Ar
+	ON Al.ArtistId = Ar.ArtistId
+Where Ar.Name = 'Queen'
+Group BY P.Name
 
 -- Listar las pistas que no están en ninguna playlist
 
@@ -74,6 +95,12 @@ GROUP BY P.Name
 
 
 -- Listar los artistas con el número de albums que tienen
-
+SELECT Ar.Name as Artist, COUNT(T.AlbumId) as 'Album Count'
+FROM Artist Ar
+INNER JOIN Album Al
+	ON Al.ArtistId = Ar.ArtistId
+INNER JOIN Track T
+on t.AlbumId = Al.AlbumId
+Group BY Ar.Name
 
 -- Para saber si está bien, asegurate que algunos de los artistas de la query anterior (artistas sin album) aparecen en este listado con 0 albums
