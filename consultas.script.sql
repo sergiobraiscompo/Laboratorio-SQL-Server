@@ -92,6 +92,14 @@ Group BY P.Name
 
 
 -- Listar los artistas que no tienen album
+SELECT Ar.Name as Artist
+FROM Artist Ar
+LEFT JOIN Album Al
+	ON Al.ArtistId = Ar.ArtistId
+LEFT JOIN Track T
+	on t.AlbumId = Al.AlbumId
+Group BY Ar.Name
+HAVING COUNT(T.AlbumId) = 0
 
 
 -- Listar los artistas con el número de albums que tienen
@@ -104,3 +112,11 @@ on t.AlbumId = Al.AlbumId
 Group BY Ar.Name
 
 -- Para saber si está bien, asegurate que algunos de los artistas de la query anterior (artistas sin album) aparecen en este listado con 0 albums
+SELECT Ar.Name as Artist, COUNT(T.AlbumId) as 'Album Count'
+FROM Artist Ar
+LEFT JOIN Album Al
+	ON Al.ArtistId = Ar.ArtistId
+LEFT JOIN Track T
+	on t.AlbumId = Al.AlbumId
+Group BY Ar.Name
+Order BY COUNT(T.AlbumId)
